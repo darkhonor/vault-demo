@@ -1,0 +1,23 @@
+#cloud-config
+# wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+# echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+# yum_repos:
+#   hashicorp:
+#     baseurl: https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable
+#     enabled: true
+#     gpgcheck: true
+#     gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL
+#     name: Hashicorp Stable (EL $releasever) - $basearch
+
+package_update: true
+package_upgrade: true 
+
+packages:
+  - jq
+  - wget
+  - curl
+  - apt-transport-https
+  - ca-certificates
+  - unzip
+  - vault
