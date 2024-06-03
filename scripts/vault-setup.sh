@@ -12,6 +12,19 @@ sudo ./aws/install
 instance_id=$( curl -Ss -H "X-aws-ec2-metadata-token: $imds_token" 169.254.169.254/latest/meta-data/instance-id )
 
 ###########################################################
+# Install HashiCorp Repository
+#
+# TODO: Find a way to do this via cloud-init
+###########################################################
+wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+###########################################################
+# Update Repositories and Install Vault
+###########################################################
+apt update && sudo apt -y install vault
+
+###########################################################
 # Create appropriate data directories
 ###########################################################
 mkdir -p /opt/vault.d
@@ -39,15 +52,15 @@ EOF
 cat > /etc/vault.d/vault.hcl <<- EOF
 ui = true
 
-cluster_addr = "https://{{ GetPrivateIP }}:8201"
+cluster_addr = "https://localhost:8201"
 
-api_addr = "https://{{ GetPrivateIP }}:8200"
+api_addr = "https://localhost:8200"
 
 disable_mlock = true
 
 storage "raft" {
   path    = "/opt/vault.d/"
-  node_id = "$${instance_id}"
+  node_id = "vault-demo-01"
 }
 
 seal "awskms" {

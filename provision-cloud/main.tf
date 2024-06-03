@@ -56,11 +56,12 @@ data "cloudinit_config" "vault" {
 module "demo_instance" {
   source        = "terraform-aws-modules/ec2-instance/aws"
   version       = "5.6.1"
-  name          = "demo-vault"
+  name          = var.name_prefix
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.ec2_instance_type
-  key_name      = "some value"
-  monitoring    = false
+  #key_name      = module.demo_keypair.key_pair_name
+  key_name   = "homelab-fips"
+  monitoring = false
   metadata_options = {
     "http_endpoint" : "enabled"
     "http_protocol_ipv6" : "enabled"
@@ -68,9 +69,18 @@ module "demo_instance" {
     "http_tokens" : "required"
   }
   vpc_security_group_ids      = [aws_security_group.vault_demo.id]
-  subnet_id                   = "some values"
+  subnet_id                   = module.demo_vpc.public_subnets[0]
   associate_public_ip_address = true
   private_ip                  = var.ec2_instance_private_ip
   user_data_base64            = data.cloudinit_config.vault.rendered
+  iam_instance_profile        = aws_iam_instance_profile.vault_server.name
 }
 
+module "demo_keypair" {
+  source                = "terraform-aws-modules/key-pair/aws"
+  version               = "2.0.3"
+  key_name              = "${var.name_prefix}-keypair"
+  create_private_key    = true
+  private_key_algorithm = "RSA"
+  private_key_rsa_bits  = 4096
+}

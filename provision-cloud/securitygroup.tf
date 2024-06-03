@@ -17,7 +17,7 @@ resource "aws_vpc_security_group_egress_rule" "default_outbound_ipv6" {
   cidr_ipv6         = "::/0"
   ip_protocol       = "tcp"
   from_port         = 0
-  to_port           = 0
+  to_port           = 65535
 
   tags = {
     Name = "allow-outbound-ipv6"
@@ -30,7 +30,7 @@ resource "aws_vpc_security_group_egress_rule" "default_outbound_ipv4" {
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "tcp"
   from_port         = 0
-  to_port           = 0
+  to_port           = 65535
 
   tags = {
     Name = "allow-outbound-ipv4"

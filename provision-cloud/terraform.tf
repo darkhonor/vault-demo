@@ -11,6 +11,10 @@ terraform {
       source  = "hashicorp/cloudinit"
       version = "~> 2.3.4"
     }
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.5.1"
+    }
     random = {
       source  = "hashicorp/random"
       version = "~> 3.6.2"
@@ -19,7 +23,6 @@ terraform {
       source  = "hashicorp/tls"
       version = "~> 4.0.5"
     }
-
   }
 }
 

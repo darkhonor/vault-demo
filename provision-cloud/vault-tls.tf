@@ -46,7 +46,7 @@ resource "tls_cert_request" "server_csr" {
     var.server_tls_servername,
     "localhost"
   ]
-  ip_addresses = concat(["127.0.0.1"], var.ec2_instance_private_ip)
+  ip_addresses = concat(["127.0.0.1"], [var.ec2_instance_private_ip])
 }
 
 resource "tls_locally_signed_cert" "server_cert" {

@@ -63,3 +63,7 @@ terraform.rc
 
 # Crash log
 crash.log
+
+# Ignore Generated Keys and Certificates
+**/*.crt
+**/*.key
