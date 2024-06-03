@@ -1,0 +1,10 @@
+###############################################################################
+# Sensitive Values for Variables unique to your environment
+# 
+# DO NOT PLACE AWS CREDENTIALS HERE--it's just bad form. These are sensitive
+# not critical values.
+###############################################################################
+###########################################################
+# Your IP Address: Requied for the AWS Security Group
+###########################################################
+my_ip_address = "128.236.17.24"

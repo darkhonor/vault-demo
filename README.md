@@ -44,9 +44,49 @@ I work in regularly for work. The lack of Internet connectivity introduces some
 unique challenges which have to be planned for and overcame in order to
 successfully deploy new services.
 
+In addition to the HashiCorp Vault Server that will be installed, I will also
+include a PostgreSQL database server on the instance for use as an example of
+a use-case for dynamic credentials.
+
 ### Cloud Instance
 
 The first example will deploy a single instance to a Cloud-hosted environment.
-With security in mind, the instance will also have some security 
+With security in mind, the instance will also have some basic security controls
+added limiting exposure of your instance to your IP address only. In a true
+production environment, there would be **MANY** more security controls applied.
+Since this instance is intended to be destroyed shortly after creation, minimal
+protections are required in order to allow you to access your service and control
+the instance.
+
+Follow the Instructions [HERE](provision-cloud/README.md) to deploy the instance.
 
 ### Airgap vSphere Instance
+
+The second example 
+
+## Configure
+
+Regardless of which route you took, this step will be be the same. In this step,
+you will configure the following capabilities on your new Vault server instance:
+
+* Root Certificate Authority
+* Intermediate Certificate Authority
+* Vault Server TLS certificate signed by Intermediate CA
+* Username / Password authentication configured with two demo users
+  * admin-user: Full admin rights to the Vault server
+  * sever-admin: Access to KV store and Intermediate CA to request Certificates
+* Security Policies configured for the two user roles
+* Key-Value Static Secrets Store
+* Database Dyncamic Secrets Engine configured for PostgreSQL server on server
+
+Follow the Instructions [HERE](configure/README.md) to configure the instance
+
+## References and Credits
+
+I would not be where I'm at in my understanding without the following fantastic
+resources. Credit to these giants for helping me get to where I'm at. I have
+tried to distill their guides into a single demonstration, but know I'm not
+covering nearly half of what they have. Check their guides and examples for
+deeper understanding.
+
+* [Getting Into Vault]() - YouTube playlist by HashiCorp
