@@ -1,0 +1,64 @@
+# Recommended macOS gitignore Includes:
+# Source: https://github.com/github/gitignore/blob/main/Global/macOS.gitignore
+
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Recommeded Terraform gitignore Includes:
+# Source: https://github.com/github/gitignore/blob/main/Terraform.gitignore
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Terraform Variables. This is an interesting topic. A premise of this demonstration will
+# be to show how to store everything that is required in Version Control without exposing
+# sensitive values. However, There will be some values that are sensitive and unique to
+# your environment that we will need to adjust for your deployment. In those cases, a
+# variable file with a `.tfvars.example` will exist with sample data. Save this file without
+# the `.example` extension and modify for you use. It will be ignored by this line:
+**/enclave.tfvars
+
+# Ignore override files as they are usually used to override resources locally and so
+# are not checked in
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+# Crash log
+crash.log
