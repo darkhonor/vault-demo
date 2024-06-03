@@ -90,3 +90,9 @@ covering nearly half of what they have. Check their guides and examples for
 deeper understanding.
 
 * [Getting Into Vault]() - YouTube playlist by HashiCorp
+
+## Questions / Feedback
+
+I'm always looking for feedback on this demo. If there are things you would
+change or improve, please submit them via the project's
+[GitHub Issue Tracker](https://github.com/darkhonor/vault-demo/issues).

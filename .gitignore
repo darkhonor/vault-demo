@@ -48,6 +48,7 @@ crash.*.log
 # variable file with a `.tfvars.example` will exist with sample data. Save this file without
 # the `.example` extension and modify for you use. It will be ignored by this line:
 **/sensitive.tfvars
+**/sensitive.auto.tfvars
 
 # Ignore override files as they are usually used to override resources locally and so
 # are not checked in

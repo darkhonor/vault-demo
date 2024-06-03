@@ -36,6 +36,11 @@ variable "my_ip_address" {
   type        = string
 }
 
+variable "server_tls_servername" {
+  description = "FQDN for Vault Server for TLS certificate"
+  type = string
+}
+
 ###########################################################
 # AWS Instance Variables
 ###########################################################
