@@ -21,7 +21,7 @@ resource "tls_self_signed_cert" "ca_cert" {
     common_name = "ca.vault.demo"
   }
 
-  validity_period_hours = 8760  # 1 year
+  validity_period_hours = 8760 # 1 year
 
   allowed_uses = [
     "cert_signing",
@@ -63,5 +63,5 @@ resource "tls_locally_signed_cert" "server_cert" {
     "server_auth",
   ]
 
-  validity_period_hours = 8760  # 1 Year
+  validity_period_hours = 8760 # 1 Year
 }

@@ -9,7 +9,7 @@ aws_region = "ap-northeast-2"
 ###########################################################
 # AWS Networking Variables
 ###########################################################
-name_prefix = "vault-demo"
+name_prefix           = "vault-demo"
 server_tls_servername = "vault.demo.local"
 
 ###########################################################

@@ -38,7 +38,7 @@ variable "my_ip_address" {
 
 variable "server_tls_servername" {
   description = "FQDN for Vault Server for TLS certificate"
-  type = string
+  type        = string
 }
 
 ###########################################################

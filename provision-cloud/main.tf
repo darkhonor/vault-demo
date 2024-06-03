@@ -55,7 +55,7 @@ data "cloudinit_config" "vault" {
 ###########################################################
 module "demo_instance" {
   source        = "terraform-aws-modules/ec2-instance/aws"
-  version       = "value"
+  version       = "5.6.1"
   name          = "demo-vault"
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.ec2_instance_type
