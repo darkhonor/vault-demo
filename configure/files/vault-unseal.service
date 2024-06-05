@@ -1,0 +1,15 @@
+[Unit]
+Description=Auto-Unseal HashiCorp Vault Service
+After=network.target
+After=vault.service
+
+[Service]
+Type=oneshot
+User=vault
+Group=vault
+ExecStartPre=/bin/sleep 10
+ExecStart=/bin/sh -c '/usr/local/bin/vault-unseal.sh'
+RemainAfterExit=false
+
+[Install]
+WantedBy=multi-user.target
