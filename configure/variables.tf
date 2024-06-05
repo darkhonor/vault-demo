@@ -9,7 +9,7 @@ variable "vault_server" {
   type        = string
 }
 
-variable "vault_token_file" {
+variable "vault_token_path" {
   description = "Filename containing a Vault Token"
   type        = string
 }
@@ -35,6 +35,28 @@ variable "admin_username" {
 variable "admin_password" {
   type        = string
   description = "Password for the Vault Administrator"
+  sensitive   = true
+}
+
+variable "standard_username" {
+  type        = string
+  description = "Username for a generic standard Vault user"
+}
+
+variable "standard_password" {
+  type        = string
+  description = "Password for a generic standard Vault user"
+  sensitive   = true
+}
+
+variable "gitlab_username" {
+  type        = string
+  description = "Username for the GitLab Service Account"
+}
+
+variable "gitlab_password" {
+  type        = string
+  description = "Password for the GitLab Service Account"
   sensitive   = true
 }
 

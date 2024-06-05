@@ -5,7 +5,7 @@
 # Vault Variables
 ###########################################################
 vault_server         = "https://vault.kten.test"
-vault_token_file     = "/home/aackerman/.cluster-vault-token"
+vault_token_path     = "/home/aackerman/.cluster-vault-token"
 vault_unverified_ssl = false
 
 ###########################################################
@@ -14,6 +14,10 @@ vault_unverified_ssl = false
 auth_path      = "userpass"
 admin_username = "admin_user"
 admin_password = "Sup3rS3kR3tP@s$w0rd!"
+standard_username = "joe.user"
+standard_password = "NotAStrongPassword!"
+gitlab_username = "gitlab.svc"
+gitlab_password = "DoesThisThingEverChange?"
 
 ###########################################################
 # Key-Value Engine Variables
