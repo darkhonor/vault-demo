@@ -13,5 +13,5 @@ path "StaticStore/*"
 # Full rights on the Intermediate CA PKI Engine
 path "pki_int/*"
 {
-  capabilities = ["list"]
+  capabilities = ["read","create","update"]
 }

@@ -168,3 +168,31 @@ variable "vault_admin_policy_name" {
   description = "Name of the Admin Policy"
   type        = string
 }
+
+###########################################################
+# Database Engine Variables
+###########################################################
+variable "db_username" {
+  description = "Service Username within the Database to create creds"
+  type = string
+}
+
+variable "db_password" {
+  description = "Password for the service account"
+  type = string
+}
+
+variable "db_hostname" {
+  description = "Hostname for the database server"
+  type = string
+}
+
+variable "db_port" {
+  description = "Port to access the database"
+  type = number
+}
+
+variable "db_name" {
+  description = "Name of the Database"
+  type = string
+}

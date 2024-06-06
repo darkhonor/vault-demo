@@ -50,3 +50,12 @@ ca_signature_algorithm   = "SHA384WithRSA"
 # Vault Policy Variables
 ###########################################################
 vault_admin_policy_name = "admins"
+
+###########################################################
+# Database Engine Variables
+###########################################################
+db_username = "dbservice"
+db_password = "NotAGoodServicePassword"
+db_hostname = "localhost"
+db_port = 5432
+db_name = "vaultdemo"
