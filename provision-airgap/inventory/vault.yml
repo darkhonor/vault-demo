@@ -1,0 +1,56 @@
+---
+###############################################################################
+# Ansible Inventory and Variable Definition
+#
+# You will need to make sure the information here is consistent with the
+# Terraform configuration variables defined in the enclave.auto.tfvars file.
+###############################################################################
+###########################################################
+# Inventory for Ansible Playbook
+###########################################################
+vault_cluster: 
+  children:
+    servers:
+      hosts:
+        ceist-vault-01:
+          ansible_host: 192.168.51.31
+        ceist-vault-02:
+          ansible_host: 192.168.51.32
+        ceist-vault-03:
+          ansible_host: 192.168.51.33
+  #########################################################
+  # Variables specific to the vault_cluster Ansible 
+  # inventory group
+  ######################################################### 
+  vars:
+    #######################################################
+    # Ansible Connection Variables
+    #######################################################
+    ansible_user: ansible
+    ansible_connection: ssh
+    ansible_become_method: sudo
+    ansible_port: 22
+
+    #######################################################
+    # Extra Disk Config
+    #######################################################
+    root_partition: /dev/sda3
+    device_name: /dev/sdb
+    device_label: gpt
+    partition_size_in_gb: 100
+    volume_mount_path: /opt/vault
+
+    #######################################################
+    # Yum Repo Config
+    #######################################################
+    repo_server: https://devops01.kten.test
+    repo_path: hashicorp-el9/
+    cert_path: certs/hashicorp.gpg
+
+    #######################################################
+    # Vault Config
+    #######################################################
+    enable_web_ui: 'true'
+    domain: kten.test
+    enclave_ca_path: https://devops01.kten.test/certs/kten-test.cer
+    vault_lb_address: vault.kten.test

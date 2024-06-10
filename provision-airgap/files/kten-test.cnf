@@ -1,0 +1,24 @@
+[server-cert]
+keyUsage = critical, digitalSignature, keyEncipherment, keyAgreement
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_name
+
+[req]
+distinguished_name = dn
+prompt = no
+
+[dn]
+C = US
+O = U.S. Government
+OU = DoD
+OU = MPE
+OU = USFK
+OU = KBSC
+CN = vault.kten.test
+
+[alt_name]
+DNS.1 = vault.kten.test
+DNS.2 = ceist-vault-01.kten.test
+DNS.3 = ceist-vault-02.kten.test
+DNS.4 = ceist-vault-03.kten.test
+

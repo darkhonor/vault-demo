@@ -1,0 +1,10 @@
+###############################################################################
+# Changes made by day.  This file exists so I don't just copy and paste the 
+# entire directory every time. Just list the files that were updated. On the
+# other systems, just copy the changed files.
+###############################################################################
+30 APR:
+- inventory/vault.yml
+- files/vault.hcl.j2
+- config-vault.yml
+- README.md 

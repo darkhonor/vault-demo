@@ -1,0 +1,151 @@
+---
+- name: Configure Vault Cluster
+  hosts: vault_cluster
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Verify Connectivity to the hosts
+      ansible.builtin.ping:
+    #######################################################
+    # Create the /opt/vault filesystem with added drive
+    #######################################################
+    - name: Create the new drive partition
+      community.general.parted:
+        device: '{{ device_name }}'
+        number: 1
+        label: '{{ device_label }}'
+        part_end: "100%"
+        state: present
+    - name: Add partition to the the Logical Volume Group
+      community.general.lvg:
+        vg: sysvg
+        pvs:
+          - '{{ root_partition }}'
+          - "{{ device_name }}1"
+        pvresize: true
+        state: present
+    - name: Create a new Logical Volume
+      community.general.lvol:
+        vg: 'sysvg'
+        lv: 'lv_vault'
+        size: "{{ partition_size_in_gb }}g"
+        state: present
+    - name: Format the logical Volume
+      community.general.filesystem:
+        fstype: xfs
+        dev: /dev/mapper/sysvg-lv_vault
+        state: present
+    - name: Mount the filesystem
+      ansible.posix.mount:
+        path: '{{ volume_mount_path }}'
+        src: /dev/mapper/sysvg-lv_vault
+        opts: defaults,nodev,nosuid
+        fstype: xfs
+        boot: true    # This is the default value
+        state: mounted
+
+    #######################################################
+    # Add HashiCorp Repository and GPG Key
+    #######################################################
+    - name: Add HashiCorp Repository
+      ansible.builtin.yum_repository:
+        name: hashicorp
+        description: HashiCorp Repository Mirror
+        baseurl: "{{ repo_server }}/{{ repo_path }}"
+        gpgcheck: true
+        gpgkey: "{{ repo_server }}/{{ cert_path }}"
+        enabled: true
+        state: present
+    - name: Install HashiCorp RPM Key
+      ansible.builtin.rpm_key:
+        key: "{{ repo_server }}/{{ cert_path }}"
+        state: present
+        validate_certs: false
+
+    #######################################################
+    # Install HashiCorp Vault
+    #######################################################
+    - name: Install Prerequisite Software
+      ansible.builtin.dnf:
+        name:
+          - jq
+          - unzip
+          - ca-certificates
+          - curl
+        state: present
+    - name: Install Vault package
+      ansible.builtin.dnf:
+        name:
+          - vault
+        state: present
+
+    #######################################################
+    # Copy Signed Certificate to Server
+    #######################################################
+    - name: Download Enclave CA Certificate to Servers
+      ansible.builtin.get_url:
+        url: '{{ enclave_ca_path }}'
+        dest: /opt/vault/tls/ca.crt
+        owner: vault
+        group: vault
+        mode: '0400'
+        backup: true
+        validate_certs: false   # Need to get this to work
+    - name: Copy Signed Certificate and Key to Servers
+      ansible.builtin.copy:
+        src: '{{ item }}'
+        dest: /opt/vault/tls/
+        owner: vault
+        group: vault
+        mode: '0400'
+        backup: true
+      loop:
+        - ./certs/tls.crt
+        - ./certs/tls.key
+
+    #######################################################
+    # Create Standard Configuration
+    #######################################################
+    - name: Copy Vault Config
+      ansible.builtin.template:
+        src: ./files/vault.hcl.j2
+        dest: /etc/vault.d/vault.hcl
+        backup: true
+        owner: vault
+        group: vault
+        mode: '0644'
+
+    #######################################################
+    # Configure System Firewall
+    #######################################################
+    - name: Add Vault Ports to Firewall
+      ansible.posix.firewalld:
+        port: '{{ item }}'
+        permanent: true
+        immediate: true
+        state: enabled
+      loop:
+        - 8200/tcp
+        - 8201/tcp
+
+    #######################################################
+    # Add Vault Environment Variables to ansible .bashrc
+    #######################################################
+    - name: Add Vault Environment Variables to .bashrc
+      ansible.builtin.lineinfile:
+        path: "/home/{{ ansible_user }}/.bashrc"
+        regexp: '^(.*)export VAULT_ADDR='
+        line: export VAULT_ADDR=https://{{ inventory_hostname }}.{{ domain }}:8200
+        backup: true
+        state: present
+
+    #######################################################
+    # Disable Automatic Start of Vault Service
+    # This needs to be done until initialization and joining
+    # of all Vault Cluster nodes.
+    #######################################################
+    - name: Disable Vault Automatic Start
+      ansible.builtin.service:
+        name: vault
+        enabled: false
+        state: stopped

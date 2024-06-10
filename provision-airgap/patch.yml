@@ -1,0 +1,69 @@
+---
+- name: Patch Vault Cluster Configuration
+  hosts: vault_cluster
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Verify Connectivity to the hosts
+      ansible.builtin.ping:
+    #######################################################
+    # Install HashiCorp Vault
+    #######################################################
+    - name: Install Prerequisite Software
+      ansible.builtin.dnf:
+        name:
+          - jq
+          - unzip
+          - ca-certificates
+          - curl
+        state: present
+    - name: Install Vault package
+      ansible.builtin.dnf:
+        name:
+          - vault
+        state: present
+
+    #######################################################
+    # Create Standard Configuration
+    #######################################################
+    - name: Copy Vault Config
+      ansible.builtin.template:
+        src: ./files/vault.hcl.j2
+        dest: /etc/vault.d/vault.hcl
+        backup: true
+        owner: vault
+        group: vault
+        mode: '0644'
+
+    #######################################################
+    # Copy Signed Certificate to Server
+    #######################################################
+    - name: Download Enclave CA Certificate to Servers
+      ansible.builtin.uri:
+        src: '{{ enclave_ca_path }}'
+        dest: /opt/vault/tls/ca.crt
+        owner: vault
+        group: vault
+        mode: '0400'
+    - name: Copy Signed Certificate and Key to Servers
+      ansible.builtin.copy:
+        src: '{{ item }}'
+        dest: /opt/vault/tls/
+        owner: vault
+        group: vault
+        mode: '0400'
+        backup: true
+      loop:
+        - ./certs/tls.crt
+        - ./certs/tls.key
+
+    #######################################################
+    # Configure Host for Intermediate CA
+    #######################################################
+    - name: Create PKI Folder for Vault CA
+      ansible.builtin.file:
+        path: /opt/vault/pki
+        owner: vault
+        group: vault
+        mode: '0700'
+        state: directory

@@ -1,0 +1,52 @@
+###############################################################################
+# KTEN Vault Cluster Configuration
+###############################################################################
+###########################################################
+# Enable Web Interface
+###########################################################
+ui = {{enable_web_ui}}
+
+###########################################################
+# Use Integrated Storage (Raft) for persistence of the 
+# Vault data. This is the current Best Practice according
+# to HashiCorp reference architectures.
+###########################################################
+storage "raft" {
+  path = "/opt/vault/data"
+  node_id = "{{inventory_hostname}}"
+  
+  retry_join {
+    leader_api_addr         = "https://{{vault_lb_address}}:8200"
+    leader_ca_cert_file     = "/opt/vault/tls/ca.crt"
+    leader_client_cert_file = "/opt/vault/tls/tls.crt"
+    leader_client_key_file  = "/opt/vault/tls/tls.key"
+    leader_tls_servername   = "{{vault_lb_address}}"
+  }
+}
+
+###########################################################
+# Address for users and applications to reference cluster.
+# Although we will use a Web Proxy, the API address needs
+# to reference the Vault port each server is listening on.
+###########################################################
+api_addr = "https://{{ansible_host}}:8200"
+
+###########################################################
+# Address for Raft to synchronize storage cluster
+###########################################################
+cluster_addr = "https://{{ansible_host}}:8201"
+
+###########################################################
+# HTTPS Listener configuration. This is what specifies the
+# port and certificate for Vault to listen to on each node.
+###########################################################
+listener "tcp" {
+  address            = "0.0.0.0:8200"
+  tls_cert_file      = "/opt/vault/tls/tls.crt"
+  tls_key_file       = "/opt/vault/tls/tls.key"
+  tls_client_ca_file = "/opt/vault/tls/ca.crt"
+}
+
+###########################################################
+# Need to Add SEIM Logging section with local ELK config
+###########################################################
